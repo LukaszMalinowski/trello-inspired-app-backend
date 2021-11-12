@@ -1,0 +1,1 @@
+# Trello-inspired-app - backend of PJATK TIN (web technologies) class project
