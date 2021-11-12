@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,5 +22,9 @@ public class Column {
     @NotNull
     @NotBlank
     private String name;
+    @ManyToOne (cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
+    private Board board;
+    @OneToMany (mappedBy = "column", cascade = CascadeType.ALL)
+    private List<Task> tasks;
 
 }

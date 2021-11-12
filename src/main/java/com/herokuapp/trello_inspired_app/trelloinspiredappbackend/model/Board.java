@@ -5,11 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,5 +26,11 @@ public class Board {
     private String description;
     @NotNull
     private LocalDateTime createdDate;
+    @ManyToOne (cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
+    private User owner;
+    @OneToMany (mappedBy = "board", cascade = CascadeType.ALL)
+    private List<BoardUser> members;
+    @OneToMany (mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Column> columns;
 
 }
