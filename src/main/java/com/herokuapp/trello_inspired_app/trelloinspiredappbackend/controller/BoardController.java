@@ -22,6 +22,7 @@ public class BoardController {
 
     @PostMapping
     public ResponseEntity<Void> addNewBoard(@RequestBody BoardDto boardDto) {
+        //TODO: figure out if id needs to be returned
         boardService.addNewBoard(boardDto);
         return ResponseEntity.noContent().build();
     }

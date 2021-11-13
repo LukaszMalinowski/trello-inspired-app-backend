@@ -44,7 +44,8 @@ public class BoardService {
         board.setOwner(user);
         board.setColumns(createDefaultColumns(board));
 
-        boardRepository.save(board);
+        Board savedBoard = boardRepository.save(board);
+        log.info("New board added. Id: {}", savedBoard.getBoardId());
     }
 
     private List<Column> createDefaultColumns(
@@ -59,7 +60,8 @@ public class BoardService {
     @Transactional
     public void deleteBoard(Long boardId) {
         //TODO: check if user has admin privileges
-        boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
-        boardRepository.deleteById(boardId);
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
+        boardRepository.delete(board);
+        log.info("Board with id {} deleted", boardId);
     }
 }
