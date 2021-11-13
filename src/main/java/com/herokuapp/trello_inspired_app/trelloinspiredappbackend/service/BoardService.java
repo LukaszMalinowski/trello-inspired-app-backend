@@ -1,6 +1,7 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Board;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Column;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
@@ -55,4 +56,10 @@ public class BoardService {
         return defaultColumns;
     }
 
+    @Transactional
+    public void deleteBoard(Long boardId) {
+        //TODO: check if user has admin privileges
+        boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
+        boardRepository.deleteById(boardId);
+    }
 }
