@@ -1,5 +1,6 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model;
 
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -19,7 +21,8 @@ import java.util.List;
 public class Board {
 
     @Id
-    private long boardId;
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private Long boardId;
     @NotNull
     @NotBlank
     private String name;
@@ -33,4 +36,9 @@ public class Board {
     @OneToMany (mappedBy = "board", cascade = CascadeType.ALL)
     private List<Column> columns;
 
+    public Board(BoardDto boardDto) {
+        this.name = boardDto.getName();
+        this.description = boardDto.getDescription();
+        this.members = Collections.emptyList();
+    }
 }

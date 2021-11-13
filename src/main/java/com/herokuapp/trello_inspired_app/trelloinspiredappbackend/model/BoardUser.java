@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 public class BoardUser {
 
     @Id
-    private long boardUserId;
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private Long boardUserId;
     @ManyToOne (cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST},
             fetch = FetchType.LAZY)
     private User user;

@@ -1,0 +1,58 @@
+package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
+
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Board;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Column;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardRepository;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class BoardService {
+
+    private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
+
+    public List<BoardDto> getAllBoards() {
+        log.info("Getting all boards");
+        List<Board> boards = boardRepository.findAll();
+        return boards.stream()
+                     .map(BoardDto::new)
+                     .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void addNewBoard(BoardDto newBoard) {
+        Board board = new Board(newBoard);
+
+        //TODO: get user from jwt
+        User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+
+        board.setCreatedDate(LocalDateTime.now());
+        board.setOwner(user);
+        board.setColumns(createDefaultColumns(board));
+
+        boardRepository.save(board);
+    }
+
+    private List<Column> createDefaultColumns(
+            Board board) {
+        List<Column> defaultColumns = new ArrayList<>();
+        defaultColumns.add(new Column("Todo", board));
+        defaultColumns.add(new Column("In progress", board));
+        defaultColumns.add(new Column("Done", board));
+        return defaultColumns;
+    }
+
+}

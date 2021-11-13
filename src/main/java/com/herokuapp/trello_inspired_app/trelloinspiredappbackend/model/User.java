@@ -7,10 +7,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
@@ -25,7 +22,8 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    private long userId;
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private Long userId;
     @NotNull
     @NotBlank
     private String username;
