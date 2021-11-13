@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -18,6 +19,7 @@ import java.util.List;
 public class Column {
 
     @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long columnId;
     @NotNull
     @NotBlank
@@ -27,4 +29,9 @@ public class Column {
     @OneToMany (mappedBy = "column", cascade = CascadeType.ALL)
     private List<Task> tasks;
 
+    public Column(String name, Board board) {
+        this.name = name;
+        this.board = board;
+        this.tasks = Collections.emptyList();
+    }
 }
