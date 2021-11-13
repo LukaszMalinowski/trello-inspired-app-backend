@@ -25,7 +25,7 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    private long userId;
+    private Long userId;
     @NotNull
     @NotBlank
     private String username;

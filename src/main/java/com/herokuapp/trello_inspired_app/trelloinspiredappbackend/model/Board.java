@@ -19,7 +19,7 @@ import java.util.List;
 public class Board {
 
     @Id
-    private long boardId;
+    private Long boardId;
     @NotNull
     @NotBlank
     private String name;

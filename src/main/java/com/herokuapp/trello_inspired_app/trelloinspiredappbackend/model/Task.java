@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class Task {
 
     @Id
-    private long taskId;
+    private Long taskId;
     @NotNull
     @NotBlank
     private String title;

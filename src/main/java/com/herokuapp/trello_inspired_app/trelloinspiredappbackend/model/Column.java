@@ -18,7 +18,7 @@ import java.util.List;
 public class Column {
 
     @Id
-    private long columnId;
+    private Long columnId;
     @NotNull
     @NotBlank
     private String name;
