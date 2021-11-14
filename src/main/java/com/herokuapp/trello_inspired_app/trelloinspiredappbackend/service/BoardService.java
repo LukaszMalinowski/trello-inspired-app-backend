@@ -3,10 +3,11 @@ package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Board;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Column;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserAlreadyHasAdminException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserIsNotMemberOfBoardException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.*;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardRepository;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardUserRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,8 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final BoardUserRepository boardUserRepository;
+
 
     public List<BoardDto> getAllBoards() {
         log.info("Getting all boards");
@@ -72,5 +75,21 @@ public class BoardService {
         return board.getMembers().stream()
                     .map(BoardUserDto::new)
                     .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void addAdminPrivileges(Long boardId, Long userId) {
+        //TODO: check if user who make request is admin
+        BoardUser boardUser = boardUserRepository
+                .findBoardUserByBoard_BoardIdAndAndUser_UserId(boardId, userId)
+                .orElseThrow(() -> new UserIsNotMemberOfBoardException(boardId, userId));
+
+        if (boardUser.getRole() == Role.ADMIN) {
+            throw new UserAlreadyHasAdminException(userId);
+        }
+
+        boardUser.setRole(Role.ADMIN);
+        boardUserRepository.save(boardUser);
+        log.info("Giving user {} admin privileges", userId);
     }
 }

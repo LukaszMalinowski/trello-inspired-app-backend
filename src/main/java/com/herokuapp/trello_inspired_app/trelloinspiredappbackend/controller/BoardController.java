@@ -2,6 +2,7 @@ package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.controller;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardUserRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,12 @@ public class BoardController {
     @GetMapping ("/{boardId}/users")
     public ResponseEntity<List<BoardUserDto>> getAllBoardMembers(@PathVariable Long boardId) {
         return ResponseEntity.ok(boardService.getAllBoardMembers(boardId));
+    }
+
+    @PostMapping ("/{boardId}/users/{userId}/admin")
+    public ResponseEntity<Void> addAdminPrivileges(@PathVariable Long boardId, @PathVariable Long userId) {
+        boardService.addAdminPrivileges(boardId, userId);
+        return ResponseEntity.noContent().build();
     }
 
 }
