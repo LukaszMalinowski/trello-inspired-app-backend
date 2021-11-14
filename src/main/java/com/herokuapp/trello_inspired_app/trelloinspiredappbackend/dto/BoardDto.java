@@ -1,17 +1,13 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Board;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class BoardDto {
 
     private long boardId;

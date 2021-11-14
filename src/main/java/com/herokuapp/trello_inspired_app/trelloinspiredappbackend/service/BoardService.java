@@ -1,6 +1,7 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Board;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Column;
@@ -63,5 +64,13 @@ public class BoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
         boardRepository.delete(board);
         log.info("Board with id {} deleted", boardId);
+    }
+
+    public List<BoardUserDto> getAllBoardMembers(Long boardId) {
+        log.info("Getting all members");
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
+        return board.getMembers().stream()
+                    .map(BoardUserDto::new)
+                    .collect(Collectors.toList());
     }
 }

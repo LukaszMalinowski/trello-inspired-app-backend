@@ -1,6 +1,7 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.controller;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,11 @@ public class BoardController {
     public ResponseEntity<Void> deleteBoard(@PathVariable Long boardId) {
         boardService.deleteBoard(boardId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping ("/{boardId}/users")
+    public ResponseEntity<List<BoardUserDto>> getAllBoardMembers(@PathVariable Long boardId) {
+        return ResponseEntity.ok(boardService.getAllBoardMembers(boardId));
     }
 
 }
