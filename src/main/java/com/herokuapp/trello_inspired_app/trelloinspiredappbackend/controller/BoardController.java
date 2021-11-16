@@ -1,8 +1,8 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.controller;
 
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardColumnDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardUserRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping ("/api/boards")
 @RequiredArgsConstructor
+//TODO: use mapstruct
 public class BoardController {
 
     private final BoardService boardService;
@@ -44,6 +45,11 @@ public class BoardController {
     public ResponseEntity<Void> addAdminPrivileges(@PathVariable Long boardId, @PathVariable Long userId) {
         boardService.addAdminPrivileges(boardId, userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping ("/{boardId}")
+    public ResponseEntity<BoardColumnDto> getBoardDetails(@PathVariable Long boardId) {
+        return ResponseEntity.ok(boardService.getBoardDetails(boardId));
     }
 
 }

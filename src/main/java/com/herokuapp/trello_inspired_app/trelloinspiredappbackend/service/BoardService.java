@@ -1,5 +1,6 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardColumnDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
@@ -91,5 +92,10 @@ public class BoardService {
         boardUser.setRole(Role.ADMIN);
         boardUserRepository.save(boardUser);
         log.info("Giving user {} admin privileges", userId);
+    }
+
+    public BoardColumnDto getBoardDetails(Long boardId) {
+
+        return null;
     }
 }
