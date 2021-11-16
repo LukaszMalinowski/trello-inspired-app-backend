@@ -1,4 +1,4 @@
-package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.controller;
+package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardColumnDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;

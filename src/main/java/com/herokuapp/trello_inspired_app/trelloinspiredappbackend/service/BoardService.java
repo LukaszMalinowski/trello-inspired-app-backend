@@ -65,14 +65,14 @@ public class BoardService {
     @Transactional
     public void deleteBoard(Long boardId) {
         //TODO: check if user has admin privileges
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         boardRepository.delete(board);
         log.info("Board with id {} deleted", boardId);
     }
 
     public List<BoardUserDto> getAllBoardMembers(Long boardId) {
         log.info("Getting all members");
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         return board.getMembers().stream()
                     .map(BoardUserDto::new)
                     .collect(Collectors.toList());
@@ -83,10 +83,10 @@ public class BoardService {
         //TODO: check if user who make request is admin
         BoardUser boardUser = boardUserRepository
                 .findBoardUserByBoard_BoardIdAndAndUser_UserId(boardId, userId)
-                .orElseThrow(() -> new UserIsNotMemberOfBoardException(boardId, userId));
+                .orElseThrow(UserIsNotMemberOfBoardException::new);
 
         if (boardUser.getRole() == Role.ADMIN) {
-            throw new UserAlreadyHasAdminException(userId);
+            throw new UserAlreadyHasAdminException();
         }
 
         boardUser.setRole(Role.ADMIN);
