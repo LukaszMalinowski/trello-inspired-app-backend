@@ -1,6 +1,5 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Board;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,10 +14,4 @@ public class BoardDto {
     private String description;
     private LocalDateTime createdDate;
 
-    public BoardDto(Board board) {
-        this.boardId = board.getBoardId();
-        this.name = board.getName();
-        this.description = board.getDescription();
-        this.createdDate = board.getCreatedDate();
-    }
 }

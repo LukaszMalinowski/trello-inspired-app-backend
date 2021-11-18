@@ -6,6 +6,7 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserD
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserAlreadyHasAdminException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserIsNotMemberOfBoardException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.BoardMapper;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.*;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardUserRepository;
@@ -29,12 +30,13 @@ public class BoardService {
     private final UserRepository userRepository;
     private final BoardUserRepository boardUserRepository;
 
+    private final BoardMapper boardMapper;
 
     public List<BoardDto> getAllBoards() {
         log.info("Getting all boards");
         List<Board> boards = boardRepository.findAll();
         return boards.stream()
-                     .map(BoardDto::new)
+                     .map(boardMapper::toDto)
                      .collect(Collectors.toList());
     }
 
@@ -74,7 +76,7 @@ public class BoardService {
         log.info("Getting all members");
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         return board.getMembers().stream()
-                    .map(BoardUserDto::new)
+                    .map(boardMapper::toUserDto)
                     .collect(Collectors.toList());
     }
 
