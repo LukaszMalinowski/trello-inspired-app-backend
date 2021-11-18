@@ -23,7 +23,7 @@ public class BaseExceptionHandler {
         var key = exception.getClass().getSimpleName();
         String description;
         try {
-            description = messageSource.getMessage(key, new Object[]{"test"}, locale);
+            description = messageSource.getMessage(key, new Object[]{}, locale);
         }
         catch (NoSuchMessageException ex) {
             description = key;
