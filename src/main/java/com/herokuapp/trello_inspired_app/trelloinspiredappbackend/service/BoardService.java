@@ -97,7 +97,7 @@ public class BoardService {
     }
 
     public BoardColumnDto getBoardDetails(Long boardId) {
-
-        return null;
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+        return boardMapper.toColumnDto(board);
     }
 }
