@@ -42,6 +42,7 @@ public class BoardService {
 
     @Transactional
     public void addNewBoard(BoardDto newBoard) {
+        log.info("Adding new board");
         Board board = new Board(newBoard);
 
         //TODO: get user from jwt
@@ -51,8 +52,7 @@ public class BoardService {
         board.setOwner(user);
         board.setColumns(createDefaultColumns(board));
 
-        Board savedBoard = boardRepository.save(board);
-        log.info("New board added. Id: {}", savedBoard.getBoardId());
+        boardRepository.save(board);
     }
 
     private List<Column> createDefaultColumns(
@@ -66,10 +66,10 @@ public class BoardService {
 
     @Transactional
     public void deleteBoard(Long boardId) {
+        log.info("Deleting board with id {}", boardId);
         //TODO: check if user has admin privileges
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         boardRepository.delete(board);
-        log.info("Board with id {} deleted", boardId);
     }
 
     public List<BoardUserDto> getAllBoardMembers(Long boardId) {
@@ -82,6 +82,7 @@ public class BoardService {
 
     @Transactional
     public void addAdminPrivileges(Long boardId, Long userId) {
+        log.info("Giving user {} admin privileges", userId);
         //TODO: check if user who make request is admin
         BoardUser boardUser = boardUserRepository
                 .findBoardUserByBoard_BoardIdAndAndUser_UserId(boardId, userId)
@@ -93,7 +94,6 @@ public class BoardService {
 
         boardUser.setRole(Role.ADMIN);
         boardUserRepository.save(boardUser);
-        log.info("Giving user {} admin privileges", userId);
     }
 
     public BoardColumnDto getBoardDetails(Long boardId) {

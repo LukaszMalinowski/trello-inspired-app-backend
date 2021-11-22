@@ -7,6 +7,7 @@ public class NewTaskDto {
 
     private String title;
     private String description;
+    //TODO: figure out if it should be here or taken from jwt
     private Long ownerId;
 
 }
