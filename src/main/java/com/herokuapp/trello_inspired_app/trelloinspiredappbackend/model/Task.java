@@ -1,9 +1,6 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor

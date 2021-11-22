@@ -4,6 +4,7 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.ExceptionD
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BaseExceptionHandler;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserAlreadyHasAdminException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserIsNotMemberOfBoardException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,8 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Locale;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class UserExceptionHandler extends BaseExceptionHandler {
@@ -30,6 +30,12 @@ public class UserExceptionHandler extends BaseExceptionHandler {
     ResponseEntity<ExceptionDto> onUserIsNotMemberOfBoardException(UserIsNotMemberOfBoardException exception,
                                                                    Locale locale) {
         return createResponse(exception, BAD_REQUEST, locale);
+    }
+
+    @ExceptionHandler (UserNotFoundException.class)
+    ResponseEntity<ExceptionDto> onUserNotFoundException(UserNotFoundException exception,
+                                                         Locale locale) {
+        return createResponse(exception, NOT_FOUND, locale);
     }
 
 }
