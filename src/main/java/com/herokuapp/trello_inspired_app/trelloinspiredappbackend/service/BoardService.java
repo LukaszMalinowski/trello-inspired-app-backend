@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+//TODO: Add assigning to board
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -41,7 +42,7 @@ public class BoardService {
     }
 
     @Transactional
-    public void addNewBoard(BoardDto newBoard) {
+    public Long addNewBoard(BoardDto newBoard) {
         log.info("Adding new board");
         Board board = new Board(newBoard);
 
@@ -52,7 +53,7 @@ public class BoardService {
         board.setOwner(user);
         board.setColumns(createDefaultColumns(board));
 
-        boardRepository.save(board);
+        return boardRepository.save(board).getBoardId();
     }
 
     private List<Column> createDefaultColumns(

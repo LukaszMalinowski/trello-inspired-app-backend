@@ -23,11 +23,11 @@ public class BoardController {
         return ResponseEntity.ok(boardService.getAllBoards());
     }
 
+    //TODO: change BoardDto here
     @PostMapping
-    public ResponseEntity<Void> addNewBoard(@RequestBody BoardDto boardDto) {
-        //TODO: figure out if id needs to be returned
-        boardService.addNewBoard(boardDto);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Long> addNewBoard(@RequestBody BoardDto boardDto) {
+        Long boardId = boardService.addNewBoard(boardDto);
+        return ResponseEntity.ok(boardId);
     }
 
     @DeleteMapping ("/{boardId}")

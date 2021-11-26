@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+//TODO: Add assigning to board
 public class TaskService {
 
     private final TaskRepository taskRepository;
