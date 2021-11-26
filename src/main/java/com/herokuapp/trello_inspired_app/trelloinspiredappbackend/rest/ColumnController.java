@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping ("/api/columns")
 @RequiredArgsConstructor
@@ -16,6 +18,12 @@ public class ColumnController {
     @PostMapping ("/{columnId}/tasks")
     public ResponseEntity<Void> addTask(@PathVariable Long columnId, @RequestBody NewTaskDto taskDto) {
         columnService.addTask(columnId, taskDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping ("/{columnId}/tasks")
+    public ResponseEntity<Void> updateTasks(@PathVariable Long columnId, @RequestBody List<Long> tasks) {
+        columnService.updateTasks(columnId, tasks);
         return ResponseEntity.noContent().build();
     }
 
