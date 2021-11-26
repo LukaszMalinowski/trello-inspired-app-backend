@@ -1,12 +1,10 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest;
 
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.UpdateTaskDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping ("/api/tasks")
@@ -19,6 +17,12 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
         taskService.deleteTask(taskId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping ("/{taskId}")
+    public ResponseEntity<Void> editTask(@PathVariable Long taskId, @RequestBody UpdateTaskDto taskDto) {
+        taskService.editTask(taskId, taskDto);
+        return ResponseEntity.ok().build();
     }
 
 }
