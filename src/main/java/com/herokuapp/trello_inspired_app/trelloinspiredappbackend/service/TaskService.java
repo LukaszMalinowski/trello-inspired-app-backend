@@ -4,6 +4,7 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.UpdateTask
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.TaskNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Task;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.TaskRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,10 @@ public class TaskService {
     }
 
     private void updateTask(Task task, UpdateTaskDto taskDto) {
-        var assignee = userRepository.findById(taskDto.getAssigneeId()).orElseThrow(UserNotFoundException::new);
+        User assignee = null;
+        if(taskDto.getAssigneeId() != null) {
+            assignee = userRepository.findById(taskDto.getAssigneeId()).orElseThrow(UserNotFoundException::new);
+        }
 
         task.setTitle(taskDto.getTitle());
         task.setDescription(taskDto.getDescription());
