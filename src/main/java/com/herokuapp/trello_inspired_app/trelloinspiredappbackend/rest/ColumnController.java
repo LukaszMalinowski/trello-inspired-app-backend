@@ -16,9 +16,9 @@ public class ColumnController {
     private final ColumnService columnService;
 
     @PostMapping ("/{columnId}/tasks")
-    public ResponseEntity<Void> addTask(@PathVariable Long columnId, @RequestBody NewTaskDto taskDto) {
-        columnService.addTask(columnId, taskDto);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Long> addTask(@PathVariable Long columnId, @RequestBody NewTaskDto taskDto) {
+        Long taskId = columnService.addTask(columnId, taskDto);
+        return ResponseEntity.ok(taskId);
     }
 
     @PutMapping ("/{columnId}/tasks")

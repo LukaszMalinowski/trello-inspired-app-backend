@@ -3,9 +3,11 @@ package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.NewTaskDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.ColumnNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.TaskNotFoundException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.TaskMapper;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.ColumnRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.TaskRepository;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,19 +24,20 @@ public class ColumnService {
 
     private final ColumnRepository columnRepository;
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
     private final TaskMapper taskMapper;
 
     @Transactional
-    public void addTask(Long columnId, NewTaskDto taskDto) {
+    public Long addTask(Long columnId, NewTaskDto taskDto) {
         log.info("Adding new task to column with id {}", columnId);
         var column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
 
+        //TODO: get user id from jwt
         var task = taskMapper.toEntity(taskDto);
         task.setCreatedDate(LocalDateTime.now());
         task.setColumn(column);
 
-        column.getTasks().add(task);
-        columnRepository.save(column);
+        return taskRepository.save(task).getTaskId();
     }
 
     //TODO there's a bug that when number of tasks is lower than previously tasks won't be deleted. Also order doesnt change.

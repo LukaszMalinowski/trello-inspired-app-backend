@@ -17,7 +17,8 @@ public abstract class TaskMapper {
         return Task.builder()
                    .title(taskDto.getTitle())
                    .description(taskDto.getDescription())
-                   .owner(userRepository.findById(taskDto.getOwnerId())
+                   //TODO: get user id from jwt
+                   .owner(userRepository.findById(1L)
                                         .orElseThrow(UserNotFoundException::new))
                    .build();
     }
