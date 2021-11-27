@@ -1,9 +1,9 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.NewTaskDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TaskDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.ColumnNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.TaskNotFoundException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.TaskMapper;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.ColumnRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.TaskRepository;
@@ -28,7 +28,7 @@ public class ColumnService {
     private final TaskMapper taskMapper;
 
     @Transactional
-    public Long addTask(Long columnId, NewTaskDto taskDto) {
+    public TaskDto addTask(Long columnId, NewTaskDto taskDto) {
         log.info("Adding new task to column with id {}", columnId);
         var column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
 
@@ -37,7 +37,7 @@ public class ColumnService {
         task.setCreatedDate(LocalDateTime.now());
         task.setColumn(column);
 
-        return taskRepository.save(task).getTaskId();
+        return taskMapper.toDto(taskRepository.save(task));
     }
 
     //TODO there's a bug that when number of tasks is lower than previously tasks won't be deleted. Also order doesnt change.
