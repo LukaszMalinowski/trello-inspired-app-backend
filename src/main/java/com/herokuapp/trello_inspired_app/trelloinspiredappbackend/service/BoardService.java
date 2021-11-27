@@ -7,7 +7,10 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.Boar
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserAlreadyHasAdminException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserIsNotMemberOfBoardException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.BoardMapper;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.*;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Board;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.BoardUser;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Column;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardUserRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.UserRepository;
@@ -20,6 +23,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Role.ADMIN;
 
 @Service
 @RequiredArgsConstructor
@@ -49,9 +54,17 @@ public class BoardService {
         //TODO: get user from jwt
         User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
 
+        var boardUser = BoardUser.builder()
+                                 .user(user)
+                                 .board(board)
+                                 .joinDate(LocalDateTime.now())
+                                 .role(ADMIN)
+                                 .build();
+
         board.setCreatedDate(LocalDateTime.now());
         board.setOwner(user);
         board.setColumns(createDefaultColumns(board));
+        board.setMembers(List.of(boardUser));
 
         return boardRepository.save(board).getBoardId();
     }
@@ -89,15 +102,16 @@ public class BoardService {
                 .findBoardUserByBoard_BoardIdAndAndUser_UserId(boardId, userId)
                 .orElseThrow(UserIsNotMemberOfBoardException::new);
 
-        if (boardUser.getRole() == Role.ADMIN) {
+        if (boardUser.getRole() == ADMIN) {
             throw new UserAlreadyHasAdminException();
         }
 
-        boardUser.setRole(Role.ADMIN);
+        boardUser.setRole(ADMIN);
         boardUserRepository.save(boardUser);
     }
 
     public BoardColumnDto getBoardDetails(Long boardId) {
+        log.info("Getting board details for board with id {}", boardId);
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         return boardMapper.toColumnDto(board);
     }
