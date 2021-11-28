@@ -6,11 +6,9 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserD
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserAlreadyHasAdminException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserIsNotMemberOfBoardException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.BoardMapper;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Board;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.BoardUser;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Column;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.*;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardUserRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.UserRepository;
@@ -42,8 +40,8 @@ public class BoardService {
         log.info("Getting all boards");
         List<Board> boards = boardRepository.findAll();
         return boards.stream()
-                     .map(boardMapper::toDto)
-                     .collect(Collectors.toList());
+                .map(boardMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -54,19 +52,13 @@ public class BoardService {
         //TODO: get user from jwt
         User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
 
-        var boardUser = BoardUser.builder()
-                                 .user(user)
-                                 .board(board)
-                                 .joinDate(LocalDateTime.now())
-                                 .role(ADMIN)
-                                 .build();
-
         board.setCreatedDate(LocalDateTime.now());
         board.setOwner(user);
         board.setColumns(createDefaultColumns(board));
-        board.setMembers(List.of(boardUser));
 
-        return boardRepository.save(board).getBoardId();
+        Long boardId = boardRepository.save(board).getBoardId();
+        addMember(user.getUserId(), boardId, ADMIN);
+        return boardId;
     }
 
     private List<Column> createDefaultColumns(
@@ -90,8 +82,8 @@ public class BoardService {
         log.info("Getting all members");
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         return board.getMembers().stream()
-                    .map(boardMapper::toUserDto)
-                    .collect(Collectors.toList());
+                .map(boardMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -114,5 +106,23 @@ public class BoardService {
         log.info("Getting board details for board with id {}", boardId);
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         return boardMapper.toColumnDto(board);
+    }
+
+    public boolean isMember(Long boardId, Long userId) {
+        return boardUserRepository.existsByBoard_BoardIdAndAndUser_UserId(boardId, userId);
+    }
+
+    public void addMember(Long userId, Long boardId, Role role) {
+        log.info("Adding user {} to board {}", userId, boardId);
+        var user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        var board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+
+        var boardUser = BoardUser.builder()
+                .user(user)
+                .board(board)
+                .joinDate(LocalDateTime.now())
+                .role(role)
+                .build();
+        boardUserRepository.save(boardUser);
     }
 }
