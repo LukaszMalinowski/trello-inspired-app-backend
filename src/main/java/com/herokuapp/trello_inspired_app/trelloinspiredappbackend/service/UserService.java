@@ -20,7 +20,7 @@ public class UserService {
 
     @Transactional
     public void registerUser(UserRegistrationDto userRegistrationDto) {
-        if (userRepository.findByUsername(userRegistrationDto.getUsername()).isPresent()) {
+        if (userRepository.existsByUsernameIgnoreCase(userRegistrationDto.getUsername())) {
             throw new UsernameIsTakenException();
         }
 
