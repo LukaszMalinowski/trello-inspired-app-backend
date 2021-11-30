@@ -1,6 +1,7 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.BoardUser;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,6 @@ public interface BoardUserRepository extends JpaRepository<BoardUser, Long> {
     Boolean existsByBoard_BoardIdAndAndUser_UserId(Long boardId, Long userId);
 
     List<BoardUser> findBoardUsersByUser_UserId(Long userId);
+
+    List<BoardUser> findBoardUsersByUser_UserId_AndRole(Long userId, Role role);
 }

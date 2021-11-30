@@ -2,6 +2,7 @@ package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardColumnDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardMembersDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserAlreadyHasAdminException;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Role.ADMIN;
 
@@ -135,6 +137,18 @@ public class BoardService {
         return boardUserRepository.findBoardUsersByUser_UserId(userId).stream()
                 .map(BoardUser::getBoard)
                 .map(boardMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<BoardMembersDto> getAllBoardsWithMembersWhichUserHasAdminRole(Long userId) {
+        log.info("Getting all boards for user {}", userId);
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
+
+        return boardUserRepository.findBoardUsersByUser_UserId_AndRole(userId, ADMIN).stream()
+                .map(BoardUser::getBoard)
+                .map(boardMapper::toMembersDto)
                 .collect(Collectors.toList());
     }
 }
