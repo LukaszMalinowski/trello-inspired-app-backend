@@ -17,7 +17,6 @@ import static com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.R
 @Service
 @RequiredArgsConstructor
 @Slf4j
-//TODO: Add assigning to board
 public class TaskService {
 
     private final TaskRepository taskRepository;
