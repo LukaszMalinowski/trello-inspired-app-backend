@@ -21,18 +21,18 @@ public class UserExceptionHandler extends BaseExceptionHandler {
         super(messageSource);
     }
 
-    @ExceptionHandler (UserAlreadyHasAdminException.class)
+    @ExceptionHandler(UserAlreadyHasAdminException.class)
     ResponseEntity<ExceptionDto> onUserAlreadyHasAdminException(UserAlreadyHasAdminException exception, Locale locale) {
         return createResponse(exception, CONFLICT, locale);
     }
 
-    @ExceptionHandler (UserIsNotMemberOfBoardException.class)
+    @ExceptionHandler(UserIsNotMemberOfBoardException.class)
     ResponseEntity<ExceptionDto> onUserIsNotMemberOfBoardException(UserIsNotMemberOfBoardException exception,
                                                                    Locale locale) {
         return createResponse(exception, BAD_REQUEST, locale);
     }
 
-    @ExceptionHandler (UserNotFoundException.class)
+    @ExceptionHandler(UserNotFoundException.class)
     ResponseEntity<ExceptionDto> onUserNotFoundException(UserNotFoundException exception,
                                                          Locale locale) {
         return createResponse(exception, NOT_FOUND, locale);

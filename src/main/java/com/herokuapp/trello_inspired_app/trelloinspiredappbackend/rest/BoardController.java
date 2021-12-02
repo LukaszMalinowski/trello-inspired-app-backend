@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping ("/api/boards")
+@RequestMapping("/api/boards")
 @RequiredArgsConstructor
-//TODO: use mapstruct
 public class BoardController {
 
     private final BoardService boardService;
@@ -30,24 +29,24 @@ public class BoardController {
         return ResponseEntity.ok(boardId);
     }
 
-    @DeleteMapping ("/{boardId}")
+    @DeleteMapping("/{boardId}")
     public ResponseEntity<Void> deleteBoard(@PathVariable Long boardId) {
         boardService.deleteBoard(boardId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping ("/{boardId}/users")
+    @GetMapping("/{boardId}/users")
     public ResponseEntity<List<BoardUserDto>> getAllBoardMembers(@PathVariable Long boardId) {
         return ResponseEntity.ok(boardService.getAllBoardMembers(boardId));
     }
 
-    @PostMapping ("/{boardId}/users/{userId}/admin")
+    @PostMapping("/{boardId}/users/{userId}/admin")
     public ResponseEntity<Void> addAdminPrivileges(@PathVariable Long boardId, @PathVariable Long userId) {
         boardService.addAdminPrivileges(boardId, userId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping ("/{boardId}")
+    @GetMapping("/{boardId}")
     public ResponseEntity<BoardColumnDto> getBoardDetails(@PathVariable Long boardId) {
         return ResponseEntity.ok(boardService.getBoardDetails(boardId));
     }

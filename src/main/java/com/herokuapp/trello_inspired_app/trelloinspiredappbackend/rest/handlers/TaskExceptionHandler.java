@@ -19,7 +19,7 @@ public class TaskExceptionHandler extends BaseExceptionHandler {
         super(messageSource);
     }
 
-    @ExceptionHandler (TaskNotFoundException.class)
+    @ExceptionHandler(TaskNotFoundException.class)
     ResponseEntity<ExceptionDto> onTaskNotFoundException(TaskNotFoundException exception,
                                                          Locale locale) {
         return createResponse(exception, NOT_FOUND, locale);

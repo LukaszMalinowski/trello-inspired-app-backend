@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping ("/api/columns")
+@RequestMapping("/api/columns")
 @RequiredArgsConstructor
 public class ColumnController {
 
     private final ColumnService columnService;
 
-    @PostMapping ("/{columnId}/tasks")
+    @PostMapping("/{columnId}/tasks")
     public ResponseEntity<TaskDto> addTask(@PathVariable Long columnId, @RequestBody NewTaskDto taskDto) {
         var task = columnService.addTask(columnId, taskDto);
         return ResponseEntity.ok(task);
     }
 
-    @PutMapping ("/{columnId}/tasks")
+    @PutMapping("/{columnId}/tasks")
     public ResponseEntity<Void> updateTasks(@PathVariable Long columnId, @RequestBody List<Long> tasks) {
         columnService.updateTasks(columnId, tasks);
         return ResponseEntity.noContent().build();

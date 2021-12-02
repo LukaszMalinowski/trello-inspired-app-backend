@@ -19,7 +19,7 @@ public class BoardExceptionHandler extends BaseExceptionHandler {
         super(messageSource);
     }
 
-    @ExceptionHandler (BoardNotFoundException.class)
+    @ExceptionHandler(BoardNotFoundException.class)
     ResponseEntity<ExceptionDto> onBoardNotFoundException(BoardNotFoundException exception, Locale locale) {
         return createResponse(exception, NOT_FOUND, locale);
     }

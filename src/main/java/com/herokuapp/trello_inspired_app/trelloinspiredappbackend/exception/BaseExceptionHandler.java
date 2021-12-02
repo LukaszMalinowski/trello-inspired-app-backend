@@ -24,8 +24,7 @@ public class BaseExceptionHandler {
         String description;
         try {
             description = messageSource.getMessage(key, new Object[]{}, locale);
-        }
-        catch (NoSuchMessageException ex) {
+        } catch (NoSuchMessageException ex) {
             description = key;
         }
         return description;

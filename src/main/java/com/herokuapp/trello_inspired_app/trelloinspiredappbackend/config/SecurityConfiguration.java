@@ -21,6 +21,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
+import static org.springframework.http.HttpMethod.GET;
+
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
@@ -60,10 +62,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/api/auth/login", "/api/auth/register").permitAll()
                 .antMatchers("/v2/api-docs").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                .antMatchers(GET, "/api/boards", "/api/boards/").permitAll()
+                .antMatchers(GET, "/api/boards/{\\d+}", "/api/boards/{\\d+}/").permitAll()
+                .antMatchers(GET, "/api/boards/{\\d+}/users", "/api/boards/{\\d+}/users/").permitAll()
                 .anyRequest().authenticated()
                 .and().cors().configurationSource(corsConfigurationSource())
                 .and().csrf().disable();

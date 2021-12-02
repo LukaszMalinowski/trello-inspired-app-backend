@@ -2,16 +2,11 @@ package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.NewTaskDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TaskDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.ColumnNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.TaskNotFoundException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.TaskMapper;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Board;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.BoardUser;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Role;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.*;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.ColumnRepository;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Role.ADMIN;
 import static com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Role.MEMBER;
 
 @Service

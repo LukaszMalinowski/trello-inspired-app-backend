@@ -8,7 +8,7 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.Use
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper (componentModel = "spring", uses = UserRepository.class)
+@Mapper(componentModel = "spring", uses = UserRepository.class)
 public abstract class TaskMapper {
 
     @Autowired
@@ -16,12 +16,12 @@ public abstract class TaskMapper {
 
     public Task toEntity(NewTaskDto taskDto) {
         return Task.builder()
-                   .title(taskDto.getTitle())
-                   .description(taskDto.getDescription())
-                   //TODO: get user id from jwt
-                   .owner(userRepository.findById(1L)
-                                        .orElseThrow(UserNotFoundException::new))
-                   .build();
+                .title(taskDto.getTitle())
+                .description(taskDto.getDescription())
+                //TODO: get user id from jwt
+                .owner(userRepository.findById(1L)
+                        .orElseThrow(UserNotFoundException::new))
+                .build();
     }
 
     public abstract TaskDto toDto(Task save);

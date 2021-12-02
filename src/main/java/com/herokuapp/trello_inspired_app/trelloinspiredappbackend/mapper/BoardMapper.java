@@ -8,8 +8,6 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Board;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.BoardUser;
 import org.mapstruct.Mapper;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring")
 public interface BoardMapper {
 

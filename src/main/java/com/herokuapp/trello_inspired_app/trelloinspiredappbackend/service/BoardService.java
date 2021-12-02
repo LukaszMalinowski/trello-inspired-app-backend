@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Role.ADMIN;
 

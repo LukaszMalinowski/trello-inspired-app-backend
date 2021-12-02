@@ -1,10 +1,8 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest;
 
-import com.auth0.jwt.JWT;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TokenDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.UserCredentialsDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.UserRegistrationDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UsernameIsTakenException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.UserService;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.util.JwtUtil;
@@ -12,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

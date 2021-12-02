@@ -21,7 +21,7 @@ import java.util.List;
 public class Board {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardId;
     @NotNull
     @NotBlank
@@ -29,11 +29,11 @@ public class Board {
     private String description;
     @NotNull
     private LocalDateTime createdDate;
-    @ManyToOne (cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
     private User owner;
-    @OneToMany (mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<BoardUser> members;
-    @OneToMany (mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Column> columns;
 
     public Board(BoardDto boardDto) {
