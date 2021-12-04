@@ -27,7 +27,6 @@ public class JwtUtil {
         calendar.add(Calendar.HOUR_OF_DAY, 12);
         Date expiresDate = calendar.getTime();
 
-
         var jwt = JWT.create()
                 .withClaim(ID, user.getUserId())
                 .withClaim(USERNAME, user.getUsername())
