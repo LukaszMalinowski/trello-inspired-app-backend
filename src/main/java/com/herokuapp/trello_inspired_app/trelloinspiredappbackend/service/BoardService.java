@@ -36,25 +36,27 @@ public class BoardService {
 
     public List<BoardDto> getAllBoards() {
         log.info("Getting all boards");
-        List<Board> boards = boardRepository.findAll();
+        var boards = boardRepository.findAll();
         return boards.stream()
                 .map(boardMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public Long addNewBoard(BoardDto newBoard) {
+    public Long addNewBoard(BoardDto newBoard, Long userId) {
         log.info("Adding new board");
-        Board board = new Board(newBoard);
 
-        //TODO: get user from jwt
-        User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        var user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Board board = Board.builder()
+                .name(newBoard.getName())
+                .description(newBoard.getDescription())
+                .createdDate(LocalDateTime.now())
+                .owner(user)
+                .build();
 
-        board.setCreatedDate(LocalDateTime.now());
-        board.setOwner(user);
         board.setColumns(createDefaultColumns(board));
 
-        Long boardId = boardRepository.save(board).getBoardId();
+        var boardId = boardRepository.save(board).getBoardId();
         addMember(user.getUserId(), boardId, ADMIN);
         return boardId;
     }

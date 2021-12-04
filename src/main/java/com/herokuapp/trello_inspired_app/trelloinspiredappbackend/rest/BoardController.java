@@ -26,8 +26,8 @@ public class BoardController {
 
     //TODO: change BoardDto here
     @PostMapping
-    public ResponseEntity<Long> addNewBoard(@RequestBody BoardDto boardDto) {
-        Long boardId = boardService.addNewBoard(boardDto);
+    public ResponseEntity<Long> addNewBoard(@RequestBody BoardDto boardDto, Authentication authentication) {
+        Long boardId = boardService.addNewBoard(boardDto, ((User) authentication.getPrincipal()).getUserId());
         return ResponseEntity.ok(boardId);
     }
 
