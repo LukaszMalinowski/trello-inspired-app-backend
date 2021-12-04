@@ -72,11 +72,7 @@ public class BoardService {
     public void deleteBoard(Long boardId, User user) {
         log.info("Deleting board with id {}", boardId);
 
-        BoardUser boardUser = boardUserRepository.findBoardUserByBoard_BoardIdAndAndUser_UserId(boardId, user.getUserId())
-                .orElseThrow(UserIsNotMemberOfBoardException::new);
-        if (boardUser.getRole() != ADMIN) {
-            throw new UserIsNotAdminException();
-        }
+        verifyIfUserIsAdmin(boardId, user.getUserId());
 
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         boardRepository.delete(board);
@@ -91,9 +87,11 @@ public class BoardService {
     }
 
     @Transactional
-    public void addAdminPrivileges(Long boardId, Long userId) {
+    public void addAdminPrivileges(Long boardId, Long userId, User user) {
         log.info("Giving user {} admin privileges", userId);
-        //TODO: check if user who make request is admin
+
+        verifyIfUserIsAdmin(boardId, user.getUserId());
+
         BoardUser boardUser = boardUserRepository
                 .findBoardUserByBoard_BoardIdAndAndUser_UserId(boardId, userId)
                 .orElseThrow(UserIsNotMemberOfBoardException::new);
@@ -152,5 +150,13 @@ public class BoardService {
                 .map(BoardUser::getBoard)
                 .map(boardMapper::toMembersDto)
                 .collect(Collectors.toList());
+    }
+
+    private void verifyIfUserIsAdmin(Long boardId, Long userId) {
+        BoardUser boardUser = boardUserRepository.findBoardUserByBoard_BoardIdAndAndUser_UserId(boardId, userId)
+                .orElseThrow(UserIsNotMemberOfBoardException::new);
+        if (boardUser.getRole() != ADMIN) {
+            throw new UserIsNotAdminException();
+        }
     }
 }

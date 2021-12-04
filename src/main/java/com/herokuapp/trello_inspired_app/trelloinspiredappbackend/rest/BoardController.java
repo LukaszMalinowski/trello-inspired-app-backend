@@ -43,8 +43,8 @@ public class BoardController {
     }
 
     @PostMapping("/{boardId}/users/{userId}/admin")
-    public ResponseEntity<Void> addAdminPrivileges(@PathVariable Long boardId, @PathVariable Long userId) {
-        boardService.addAdminPrivileges(boardId, userId);
+    public ResponseEntity<Void> addAdminPrivileges(@PathVariable Long boardId, @PathVariable Long userId, Authentication authentication) {
+        boardService.addAdminPrivileges(boardId, userId, (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
     }
 
