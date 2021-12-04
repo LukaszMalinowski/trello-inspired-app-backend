@@ -19,14 +19,14 @@ import java.util.List;
 public class Column {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long columnId;
     @NotNull
     @NotBlank
     private String name;
-    @ManyToOne (cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
     private Board board;
-    @OneToMany (mappedBy = "column", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "column", cascade = CascadeType.ALL)
     private List<Task> tasks;
 
     public Column(String name, Board board) {

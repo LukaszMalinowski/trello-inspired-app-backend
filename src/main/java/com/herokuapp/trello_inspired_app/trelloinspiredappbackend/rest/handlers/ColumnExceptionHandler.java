@@ -19,7 +19,7 @@ public class ColumnExceptionHandler extends BaseExceptionHandler {
         super(messageSource);
     }
 
-    @ExceptionHandler (ColumnNotFoundException.class)
+    @ExceptionHandler(ColumnNotFoundException.class)
     ResponseEntity<ExceptionDto> onColumnNotFoundException(ColumnNotFoundException exception,
                                                            Locale locale) {
         return createResponse(exception, NOT_FOUND, locale);

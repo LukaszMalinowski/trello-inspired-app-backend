@@ -1,16 +1,11 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -18,10 +13,11 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Board {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardId;
     @NotNull
     @NotBlank
@@ -29,16 +25,11 @@ public class Board {
     private String description;
     @NotNull
     private LocalDateTime createdDate;
-    @ManyToOne (cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
     private User owner;
-    @OneToMany (mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<BoardUser> members;
-    @OneToMany (mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Column> columns;
 
-    public Board(BoardDto boardDto) {
-        this.name = boardDto.getName();
-        this.description = boardDto.getDescription();
-        this.members = Collections.emptyList();
-    }
 }

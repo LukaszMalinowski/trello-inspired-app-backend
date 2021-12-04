@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Map;
 
-@EqualsAndHashCode (callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class ValidationExceptionDto extends ExceptionDto {
 

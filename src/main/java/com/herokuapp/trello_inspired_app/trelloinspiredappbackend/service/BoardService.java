@@ -4,10 +4,7 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardColum
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardMembersDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserAlreadyHasAdminException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserIsNotMemberOfBoardException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.*;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.BoardMapper;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.*;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardRepository;
@@ -22,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Role.ADMIN;
 
@@ -40,25 +36,27 @@ public class BoardService {
 
     public List<BoardDto> getAllBoards() {
         log.info("Getting all boards");
-        List<Board> boards = boardRepository.findAll();
+        var boards = boardRepository.findAll();
         return boards.stream()
                 .map(boardMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public Long addNewBoard(BoardDto newBoard) {
+    public Long addNewBoard(BoardDto newBoard, Long userId) {
         log.info("Adding new board");
-        Board board = new Board(newBoard);
 
-        //TODO: get user from jwt
-        User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        var user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Board board = Board.builder()
+                .name(newBoard.getName())
+                .description(newBoard.getDescription())
+                .createdDate(LocalDateTime.now())
+                .owner(user)
+                .build();
 
-        board.setCreatedDate(LocalDateTime.now());
-        board.setOwner(user);
         board.setColumns(createDefaultColumns(board));
 
-        Long boardId = boardRepository.save(board).getBoardId();
+        var boardId = boardRepository.save(board).getBoardId();
         addMember(user.getUserId(), boardId, ADMIN);
         return boardId;
     }
@@ -73,9 +71,11 @@ public class BoardService {
     }
 
     @Transactional
-    public void deleteBoard(Long boardId) {
+    public void deleteBoard(Long boardId, User user) {
         log.info("Deleting board with id {}", boardId);
-        //TODO: check if user has admin privileges
+
+        verifyIfUserIsAdmin(boardId, user.getUserId());
+
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         boardRepository.delete(board);
     }
@@ -89,9 +89,11 @@ public class BoardService {
     }
 
     @Transactional
-    public void addAdminPrivileges(Long boardId, Long userId) {
+    public void addAdminPrivileges(Long boardId, Long userId, User user) {
         log.info("Giving user {} admin privileges", userId);
-        //TODO: check if user who make request is admin
+
+        verifyIfUserIsAdmin(boardId, user.getUserId());
+
         BoardUser boardUser = boardUserRepository
                 .findBoardUserByBoard_BoardIdAndAndUser_UserId(boardId, userId)
                 .orElseThrow(UserIsNotMemberOfBoardException::new);
@@ -128,27 +130,35 @@ public class BoardService {
         boardUserRepository.save(boardUser);
     }
 
-    public List<BoardDto> getAllBoardsThatUserIsAssignedTo(Long userId) {
+    public List<BoardDto> getAllBoardsThatUserIsAssignedTo(Long userId, User user) {
         log.info("Getting all boards for user {}", userId);
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException();
-        }
-        //TODO check from jwt if userId matches
+        verifyUser(userId, user);
         return boardUserRepository.findBoardUsersByUser_UserId(userId).stream()
                 .map(BoardUser::getBoard)
                 .map(boardMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<BoardMembersDto> getAllBoardsWithMembersWhichUserHasAdminRole(Long userId) {
-        log.info("Getting all boards for user {}", userId);
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException();
-        }
-
+    public List<BoardMembersDto> getAllBoardsWithMembersWhichUserHasAdminRole(Long userId, User user) {
+        log.info("Getting all boards with members for user {}", userId);
+        verifyUser(userId, user);
         return boardUserRepository.findBoardUsersByUser_UserId_AndRole(userId, ADMIN).stream()
                 .map(BoardUser::getBoard)
                 .map(boardMapper::toMembersDto)
                 .collect(Collectors.toList());
+    }
+
+    private void verifyUser(Long userId, User user) {
+        if (!user.getUserId().equals(userId)) {
+            throw new UserNotPermittedException();
+        }
+    }
+
+    private void verifyIfUserIsAdmin(Long boardId, Long userId) {
+        BoardUser boardUser = boardUserRepository.findBoardUserByBoard_BoardIdAndAndUser_UserId(boardId, userId)
+                .orElseThrow(UserIsNotMemberOfBoardException::new);
+        if (boardUser.getRole() != ADMIN) {
+            throw new UserIsNotAdminException();
+        }
     }
 }

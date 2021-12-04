@@ -27,7 +27,7 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
 //        return createResponse(exception, INTERNAL_SERVER_ERROR, locale);
 //    }
 
-    @ExceptionHandler (MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ExceptionDto> onValidationException(MethodArgumentNotValidException exception,
                                                                  Locale locale) {
         var validationErrors = getValidationErrors(exception);
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
     private Map<String, String> getValidationErrors(MethodArgumentNotValidException exception) {
         Map<String, String> validationErrors = new HashMap<>();
         exception.getBindingResult().getFieldErrors()
-                 .forEach(error -> validationErrors.put(error.getField(), error.getDefaultMessage()));
+                .forEach(error -> validationErrors.put(error.getField(), error.getDefaultMessage()));
         return validationErrors;
     }
 
