@@ -3,6 +3,7 @@ package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest.handlers
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.ExceptionDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BaseExceptionHandler;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserIsNotAdminException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotPermittedException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UsernameIsTakenException;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,11 @@ public class AuthorizationExceptionHandler extends BaseExceptionHandler {
 
     @ExceptionHandler(UserIsNotAdminException.class)
     ResponseEntity<ExceptionDto> onUserIsNotAdminException(UserIsNotAdminException exception, Locale locale) {
+        return createResponse(exception, FORBIDDEN, locale);
+    }
+
+    @ExceptionHandler(UserNotPermittedException.class)
+    ResponseEntity<ExceptionDto> onUserNotPermittedException(UserNotPermittedException exception, Locale locale) {
         return createResponse(exception, FORBIDDEN, locale);
     }
 

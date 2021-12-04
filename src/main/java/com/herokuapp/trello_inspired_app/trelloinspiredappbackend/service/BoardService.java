@@ -130,12 +130,11 @@ public class BoardService {
         boardUserRepository.save(boardUser);
     }
 
-    public List<BoardDto> getAllBoardsThatUserIsAssignedTo(Long userId) {
+    public List<BoardDto> getAllBoardsThatUserIsAssignedTo(Long userId, User user) {
         log.info("Getting all boards for user {}", userId);
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException();
+        if (!user.getUserId().equals(userId)) {
+            throw new UserNotPermittedException();
         }
-        //TODO check from jwt if userId matches
         return boardUserRepository.findBoardUsersByUser_UserId(userId).stream()
                 .map(BoardUser::getBoard)
                 .map(boardMapper::toDto)
