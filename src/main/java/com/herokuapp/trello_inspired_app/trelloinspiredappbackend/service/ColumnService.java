@@ -7,6 +7,7 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.Task
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.TaskMapper;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Task;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.ColumnRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.TaskRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.UserRepository;
@@ -53,7 +54,7 @@ public class ColumnService {
                 .description(taskDto.getDescription())
                 .owner(user)
                 .build();
-        
+
         task.setCreatedDate(LocalDateTime.now());
         task.setColumn(column);
 
@@ -62,15 +63,13 @@ public class ColumnService {
 
     //TODO there's a bug that when number of tasks is lower than previously tasks won't be deleted. Also order doesnt change.
     @Transactional
-    public void updateTasks(Long columnId, List<Long> taskIds) {
+    public void updateTasks(Long columnId, List<Long> taskIds, User user) {
         log.info("Updating tasks in column with id {}", columnId);
         var column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
         Long boardId = column.getBoard().getBoardId();
-        //TODO: get user id from jwt
-        Long userId = 1L;
 
-        if (!boardService.isMember(boardId, userId)) {
-            boardService.addMember(userId, boardId, MEMBER);
+        if (!boardService.isMember(boardId, user.getUserId())) {
+            boardService.addMember(user.getUserId(), boardId, MEMBER);
         }
 
         var tasks = taskIds.stream()

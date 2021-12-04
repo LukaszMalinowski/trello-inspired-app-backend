@@ -2,9 +2,11 @@ package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.NewTaskDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TaskDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.ColumnService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -24,8 +26,8 @@ public class ColumnController {
     }
 
     @PutMapping("/{columnId}/tasks")
-    public ResponseEntity<Void> updateTasks(@PathVariable Long columnId, @RequestBody List<Long> tasks, Principal principal) {
-        columnService.updateTasks(columnId, tasks);
+    public ResponseEntity<Void> updateTasks(@PathVariable Long columnId, @RequestBody List<Long> tasks, Authentication authentication) {
+        columnService.updateTasks(columnId, tasks, (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
     }
 
