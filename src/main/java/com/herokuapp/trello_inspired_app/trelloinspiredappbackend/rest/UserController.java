@@ -28,8 +28,8 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/boards/admin")
-    public ResponseEntity<List<BoardMembersDto>> getAllBoardsWhichUserHasAdminRole(@PathVariable Long userId) {
-        var boards = boardService.getAllBoardsWithMembersWhichUserHasAdminRole(userId);
+    public ResponseEntity<List<BoardMembersDto>> getAllBoardsWhichUserHasAdminRole(@PathVariable Long userId, Authentication authentication) {
+        var boards = boardService.getAllBoardsWithMembersWhichUserHasAdminRole(userId, (User) authentication.getPrincipal());
         return ResponseEntity.ok(boards);
     }
 

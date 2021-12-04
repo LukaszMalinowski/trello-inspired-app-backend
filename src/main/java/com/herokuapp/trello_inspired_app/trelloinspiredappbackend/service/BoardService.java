@@ -132,25 +132,26 @@ public class BoardService {
 
     public List<BoardDto> getAllBoardsThatUserIsAssignedTo(Long userId, User user) {
         log.info("Getting all boards for user {}", userId);
-        if (!user.getUserId().equals(userId)) {
-            throw new UserNotPermittedException();
-        }
+        verifyUser(userId, user);
         return boardUserRepository.findBoardUsersByUser_UserId(userId).stream()
                 .map(BoardUser::getBoard)
                 .map(boardMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<BoardMembersDto> getAllBoardsWithMembersWhichUserHasAdminRole(Long userId) {
-        log.info("Getting all boards for user {}", userId);
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException();
-        }
-
+    public List<BoardMembersDto> getAllBoardsWithMembersWhichUserHasAdminRole(Long userId, User user) {
+        log.info("Getting all boards with members for user {}", userId);
+        verifyUser(userId, user);
         return boardUserRepository.findBoardUsersByUser_UserId_AndRole(userId, ADMIN).stream()
                 .map(BoardUser::getBoard)
                 .map(boardMapper::toMembersDto)
                 .collect(Collectors.toList());
+    }
+
+    private void verifyUser(Long userId, User user) {
+        if (!user.getUserId().equals(userId)) {
+            throw new UserNotPermittedException();
+        }
     }
 
     private void verifyIfUserIsAdmin(Long boardId, Long userId) {
