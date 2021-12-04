@@ -4,9 +4,12 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.NewTaskDto
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TaskDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.ColumnNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.TaskNotFoundException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.TaskMapper;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Task;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.ColumnRepository;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.TaskRepository;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ public class ColumnService {
 
     private final ColumnRepository columnRepository;
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
     private final BoardService boardService;
 
@@ -32,18 +36,24 @@ public class ColumnService {
 
 
     @Transactional
-    public TaskDto addTask(Long columnId, NewTaskDto taskDto) {
+    public TaskDto addTask(Long columnId, NewTaskDto taskDto, String username) {
         log.info("Adding new task to column with id {}", columnId);
+
         var column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
         Long boardId = column.getBoard().getBoardId();
-        //TODO: get user id from jwt
-        Long userId = 1L;
 
-        if (!boardService.isMember(boardId, userId)) {
-            boardService.addMember(userId, boardId, MEMBER);
+        var user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+
+        if (!boardService.isMember(boardId, user.getUserId())) {
+            boardService.addMember(user.getUserId(), boardId, MEMBER);
         }
 
-        var task = taskMapper.toEntity(taskDto);
+        var task = Task.builder()
+                .title(taskDto.getTitle())
+                .description(taskDto.getDescription())
+                .owner(user)
+                .build();
+        
         task.setCreatedDate(LocalDateTime.now());
         task.setColumn(column);
 
