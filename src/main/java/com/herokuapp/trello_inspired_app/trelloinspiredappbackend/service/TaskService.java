@@ -25,25 +25,23 @@ public class TaskService {
     private final BoardService boardService;
 
     @Transactional
-    public void deleteTask(Long taskId) {
+    public void deleteTask(Long taskId, User user) {
         log.info("Removing task with id {}", taskId);
         var task = taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
         Long boardId = task.getColumn().getBoard().getBoardId();
-        Long userId = 1L;
-        if (!boardService.isMember(boardId, userId)) {
-            boardService.addMember(userId, boardId, MEMBER);
+        if (!boardService.isMember(boardId, user.getUserId())) {
+            boardService.addMember(user.getUserId(), boardId, MEMBER);
         }
         taskRepository.delete(task);
     }
 
     @Transactional
-    public void editTask(Long taskId, UpdateTaskDto taskDto) {
+    public void editTask(Long taskId, UpdateTaskDto taskDto, User user) {
         log.info("Editing task with id {}", taskId);
         var task = taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
         Long boardId = task.getColumn().getBoard().getBoardId();
-        Long userId = 1L;
-        if (!boardService.isMember(boardId, userId)) {
-            boardService.addMember(userId, boardId, MEMBER);
+        if (!boardService.isMember(boardId, user.getUserId())) {
+            boardService.addMember(user.getUserId(), boardId, MEMBER);
         }
         updateTask(task, taskDto);
         taskRepository.save(task);
