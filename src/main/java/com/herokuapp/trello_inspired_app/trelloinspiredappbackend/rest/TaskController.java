@@ -6,6 +6,7 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.TaskSe
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,7 +23,7 @@ public class TaskController {
     }
 
     @PutMapping("/{taskId}")
-    public ResponseEntity<Void> editTask(@PathVariable Long taskId, @RequestBody UpdateTaskDto taskDto, Authentication authentication) {
+    public ResponseEntity<Void> editTask(@PathVariable Long taskId, @RequestBody @Validated UpdateTaskDto taskDto, Authentication authentication) {
         taskService.editTask(taskId, taskDto, (User) authentication.getPrincipal());
         return ResponseEntity.ok().build();
     }

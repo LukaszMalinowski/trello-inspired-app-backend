@@ -8,6 +8,7 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.BoardS
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class BoardController {
 
     //TODO: change BoardDto here
     @PostMapping
-    public ResponseEntity<Long> addNewBoard(@RequestBody BoardDto boardDto, Authentication authentication) {
+    public ResponseEntity<Long> addNewBoard(@RequestBody @Validated BoardDto boardDto, Authentication authentication) {
         Long boardId = boardService.addNewBoard(boardDto, ((User) authentication.getPrincipal()).getUserId());
         return ResponseEntity.ok(boardId);
     }
