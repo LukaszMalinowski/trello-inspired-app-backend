@@ -13,7 +13,9 @@ public interface BoardUserRepository extends JpaRepository<BoardUser, Long> {
 
     Optional<BoardUser> findBoardUserByBoard_BoardIdAndAndUser_UserId(Long boardId, Long userId);
 
-    Boolean existsByBoard_BoardIdAndAndUser_UserId(Long boardId, Long userId);
+    boolean existsByBoard_BoardIdAndUser_UserIdAndRole(Long boardId, Long userId, Role role);
+
+    boolean existsByBoard_BoardIdAndAndUser_UserId(Long boardId, Long userId);
 
     List<BoardUser> findBoardUsersByUser_UserId(Long userId);
 

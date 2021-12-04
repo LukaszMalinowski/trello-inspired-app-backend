@@ -3,9 +3,11 @@ package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardColumnDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +32,8 @@ public class BoardController {
     }
 
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<Void> deleteBoard(@PathVariable Long boardId) {
-        boardService.deleteBoard(boardId);
+    public ResponseEntity<Void> deleteBoard(@PathVariable Long boardId, Authentication authentication) {
+        boardService.deleteBoard(boardId, (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
     }
 

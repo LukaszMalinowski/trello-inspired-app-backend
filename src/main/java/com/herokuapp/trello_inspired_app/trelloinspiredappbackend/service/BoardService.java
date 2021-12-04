@@ -4,10 +4,7 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardColum
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardMembersDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserAlreadyHasAdminException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserIsNotMemberOfBoardException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.*;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.BoardMapper;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.*;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.BoardRepository;
@@ -72,9 +69,15 @@ public class BoardService {
     }
 
     @Transactional
-    public void deleteBoard(Long boardId) {
+    public void deleteBoard(Long boardId, User user) {
         log.info("Deleting board with id {}", boardId);
-        //TODO: check if user has admin privileges
+
+        BoardUser boardUser = boardUserRepository.findBoardUserByBoard_BoardIdAndAndUser_UserId(boardId, user.getUserId())
+                .orElseThrow(UserIsNotMemberOfBoardException::new);
+        if (boardUser.getRole() != ADMIN) {
+            throw new UserIsNotAdminException();
+        }
+
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         boardRepository.delete(board);
     }
