@@ -1,8 +1,6 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,7 +11,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Team {
 
     @Id

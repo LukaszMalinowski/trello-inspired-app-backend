@@ -1,10 +1,7 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest.handlers;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.ExceptionDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BaseExceptionHandler;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserAlreadyHasAdminException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserIsNotMemberOfBoardException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.*;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

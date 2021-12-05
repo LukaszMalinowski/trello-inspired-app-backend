@@ -27,20 +27,5 @@ public interface BoardMapper {
     }
 
     BoardMembersDto toMembersDto(Board board);
-//    default BoardMembersDto toMembersDto(Board board) {
-//        return BoardMembersDto.builder()
-//                .boardId(board.getBoardId())
-//                .name(board.getName())
-//                .description(board.getDescription())
-//                .createdDate(board.getCreatedDate())
-//                .members()
-//                .build();
-//    }
-//
-//    default BoardUserDto getMembers(BoardUser user) {
-//        return BoardUserDto.builder()
-//                .userId(user.)
-//                .build()
-//    }
 
 }

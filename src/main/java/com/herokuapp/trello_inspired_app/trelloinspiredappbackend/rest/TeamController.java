@@ -1,9 +1,14 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest;
 
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TeamDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.TeamService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/teams")
@@ -11,5 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeamController {
 
     private final TeamService teamService;
+
+
+    @PostMapping
+    public ResponseEntity<TeamDto> addNewTeam(@RequestBody @Validated TeamDto teamDto, Principal principal) {
+        var team = teamService.addNewTeam(teamDto, principal.getName());
+        return ResponseEntity.ok(team);
+    }
+
+    @PostMapping("/{teamId}/boards")
+    public ResponseEntity<BoardDto> addNewBoardInTeam(@PathVariable Long teamId, @RequestBody @Validated BoardDto boardDto, Principal principal) {
+        var board = teamService.addTeamBoard(teamId, boardDto, principal.getName());
+        return ResponseEntity.ok(board);
+    }
 
 }
