@@ -71,11 +71,13 @@ public class TeamService {
                 .build();
         teamUserRepository.save(teamUser);
 
-        team.getBoards()
-                .stream()
-                .filter(board -> board.getMembers().stream()
-                        .anyMatch(boardUser -> !boardUser.getUser().getUserId().equals(userId)))
-                .forEach(board -> boardService.addMember(userId, board.getBoardId(), ADMIN));
+        if (team.getBoards() != null) {
+            team.getBoards()
+                    .stream()
+                    .filter(board -> board.getMembers().stream()
+                            .anyMatch(boardUser -> !boardUser.getUser().getUserId().equals(userId)))
+                    .forEach(board -> boardService.addMember(userId, board.getBoardId(), ADMIN));
+        }
     }
 
     @Transactional
