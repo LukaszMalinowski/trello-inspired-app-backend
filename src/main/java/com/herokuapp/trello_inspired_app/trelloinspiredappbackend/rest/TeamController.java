@@ -22,7 +22,6 @@ public class TeamController {
 
     private final TeamService teamService;
 
-
     @GetMapping
     public ResponseEntity<List<TeamDetailsDto>> getAllTeams() {
         var teams = teamService.getAllTeams();

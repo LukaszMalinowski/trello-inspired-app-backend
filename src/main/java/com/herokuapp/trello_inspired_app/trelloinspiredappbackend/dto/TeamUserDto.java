@@ -4,16 +4,15 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Builder
-public class TeamDetailsDto {
+public class TeamUserDto {
 
-    private Long teamId;
+    private LocalDateTime joinDate;
+    private Long userId;
+    private String username;
     private String name;
-    private LocalDateTime createdDate;
-    private UserDto owner;
-    private List<TeamUserDto> members;
+    private String surname;
 
 }

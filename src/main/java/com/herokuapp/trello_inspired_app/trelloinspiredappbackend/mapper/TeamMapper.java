@@ -2,8 +2,9 @@ package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TeamDetailsDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TeamDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.UserDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TeamUserDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Team;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.TeamUser;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
@@ -11,23 +12,15 @@ public interface TeamMapper {
 
     TeamDto toDto(Team team);
 
-    default TeamDetailsDto toDetailsDto(Team team) {
-        var teamOwner = team.getOwner();
-        var owner = UserDto.builder()
-                .userId(teamOwner.getUserId())
-                .username(teamOwner.getUsername())
-                .name(teamOwner.getName())
-                .surname(teamOwner.getSurname())
-                .surname(teamOwner.getSurname())
-                .build();
+    TeamDetailsDto toDetailsDto(Team team);
 
-        return TeamDetailsDto.builder()
-                .teamId(team.getTeamId())
-                .name(team.getName())
-                .createdDate(team.getCreatedDate())
-                .owner(owner)
-                .membersCount(team.getMembers().size())
+    default TeamUserDto toMembersDto(TeamUser teamUser) {
+        return TeamUserDto.builder()
+                .userId(teamUser.getUser().getUserId())
+                .username(teamUser.getUser().getUsername())
+                .name(teamUser.getUser().getName())
+                .surname(teamUser.getUser().getSurname())
+                .joinDate(teamUser.getJoinDate())
                 .build();
     }
-
 }
