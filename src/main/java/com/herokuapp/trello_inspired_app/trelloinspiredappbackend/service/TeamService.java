@@ -1,6 +1,7 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TeamDetailsDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TeamDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.TeamNotFoundException;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -85,5 +88,12 @@ public class TeamService {
         if (!userIsMember) {
             throw new UserIsNotMemberOfTeamException();
         }
+    }
+
+    public List<TeamDetailsDto> getAllTeams() {
+        var teams = teamRepository.findAll();
+        return teams.stream()
+                .map(teamMapper::toDetailsDto)
+                .collect(Collectors.toList());
     }
 }

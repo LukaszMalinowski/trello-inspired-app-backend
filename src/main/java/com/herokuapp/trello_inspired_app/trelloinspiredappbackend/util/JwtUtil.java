@@ -24,7 +24,7 @@ public class JwtUtil {
     public TokenDto createToken(User user) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.add(Calendar.HOUR_OF_DAY, 12);
+        calendar.add(Calendar.DAY_OF_MONTH, 12);
         Date expiresDate = calendar.getTime();
 
         var jwt = JWT.create()

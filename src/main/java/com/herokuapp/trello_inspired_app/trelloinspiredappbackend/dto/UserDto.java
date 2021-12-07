@@ -1,14 +1,12 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserDto {
 
     private Long userId;
