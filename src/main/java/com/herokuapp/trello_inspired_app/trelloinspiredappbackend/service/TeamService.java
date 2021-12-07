@@ -96,4 +96,15 @@ public class TeamService {
                 .map(teamMapper::toDetailsDto)
                 .collect(Collectors.toList());
     }
+
+    public List<BoardDto> getAllTeamBoards(Long teamId, String name) {
+        var user = userRepository.findByUsername(name).orElseThrow(UserNotFoundException::new);
+        var team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+
+        verifyIfUserIsMemberOfTeam(team, user);
+
+        return team.getBoards().stream()
+                .map(boardMapper::toDto)
+                .collect(Collectors.toList());
+    }
 }

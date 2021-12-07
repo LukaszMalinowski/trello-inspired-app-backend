@@ -32,6 +32,12 @@ public class TeamController {
         return ResponseEntity.ok(team);
     }
 
+    @GetMapping("/{teamId}/boards")
+    public ResponseEntity<List<BoardDto>> getAllTeamBoards(@PathVariable Long teamId, Principal principal) {
+        var boards = teamService.getAllTeamBoards(teamId, principal.getName());
+        return ResponseEntity.ok(boards);
+    }
+
     @PostMapping("/{teamId}/boards")
     public ResponseEntity<BoardDto> addNewBoardInTeam(@PathVariable Long teamId, @RequestBody @Validated BoardDto boardDto, Principal principal) {
         var board = teamService.addTeamBoard(teamId, boardDto, principal.getName());
