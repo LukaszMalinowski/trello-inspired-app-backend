@@ -25,6 +25,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Role.ADMIN;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -56,7 +58,7 @@ public class TeamService {
         return teamMapper.toDto(team);
     }
 
-    private void addTeamMember(Long userId, Long teamId) {
+    public void addTeamMember(Long userId, Long teamId) {
         var user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         var team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
 
@@ -66,6 +68,12 @@ public class TeamService {
                 .joinDate(LocalDateTime.now())
                 .build();
         teamUserRepository.save(teamUser);
+
+        team.getBoards()
+                .stream()
+                .filter(board -> board.getMembers().stream()
+                        .anyMatch(boardUser -> !boardUser.getUser().getUserId().equals(userId)))
+                .forEach(board -> boardService.addMember(userId, board.getBoardId(), ADMIN));
     }
 
     @Transactional
