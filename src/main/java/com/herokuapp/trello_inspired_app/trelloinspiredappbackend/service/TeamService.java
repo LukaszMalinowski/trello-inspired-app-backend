@@ -58,7 +58,9 @@ public class TeamService {
         return teamMapper.toDto(team);
     }
 
+    @Transactional
     public void addTeamMember(Long userId, Long teamId) {
+        log.info("Adding user {} to team {}", userId, teamId);
         var user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         var team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
 
@@ -78,6 +80,7 @@ public class TeamService {
 
     @Transactional
     public BoardDto addTeamBoard(Long teamId, BoardDto boardDto, String username) {
+        log.info("Adding new team board");
         var team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         var user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
         verifyIfUserIsMemberOfTeam(team, user);
@@ -99,6 +102,7 @@ public class TeamService {
     }
 
     public List<TeamDetailsDto> getAllTeams() {
+        log.info("Getting all teams");
         var teams = teamRepository.findAll();
         return teams.stream()
                 .map(teamMapper::toDetailsDto)
@@ -106,6 +110,7 @@ public class TeamService {
     }
 
     public List<BoardDto> getAllTeamBoards(Long teamId, String name) {
+        log.info("Getting all boards for team {}", teamId);
         var user = userRepository.findByUsername(name).orElseThrow(UserNotFoundException::new);
         var team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
 

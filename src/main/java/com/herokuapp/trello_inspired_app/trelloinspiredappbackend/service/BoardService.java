@@ -33,6 +33,7 @@ public class BoardService {
 
     private final BoardMapper boardMapper;
 
+    //TODO: filter boards with teams
     public List<BoardDto> getAllBoards() {
         log.info("Getting all boards");
         var boards = boardRepository.findAll();
