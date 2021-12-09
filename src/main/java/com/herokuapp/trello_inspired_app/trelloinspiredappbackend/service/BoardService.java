@@ -33,11 +33,11 @@ public class BoardService {
 
     private final BoardMapper boardMapper;
 
-    //TODO: filter boards with teams
     public List<BoardDto> getAllBoards() {
         log.info("Getting all boards");
         var boards = boardRepository.findAll();
         return boards.stream()
+                .filter(board -> board.getTeam() == null)
                 .map(boardMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -135,6 +135,7 @@ public class BoardService {
         verifyUser(userId, user);
         return boardUserRepository.findBoardUsersByUser_UserId(userId).stream()
                 .map(BoardUser::getBoard)
+                .filter(board -> board.getTeam() == null)
                 .map(boardMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -144,6 +145,7 @@ public class BoardService {
         verifyUser(userId, user);
         return boardUserRepository.findBoardUsersByUser_UserId_AndRole(userId, ADMIN).stream()
                 .map(BoardUser::getBoard)
+                .filter(board -> board.getTeam() == null)
                 .map(boardMapper::toMembersDto)
                 .collect(Collectors.toList());
     }
