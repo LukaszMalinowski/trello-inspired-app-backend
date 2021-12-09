@@ -43,7 +43,7 @@ public class TeamService {
     private final BoardMapper boardMapper;
 
     @Transactional
-    public TeamDto addNewTeam(TeamDto teamDto, String username) {
+    public TeamDetailsDto addNewTeam(TeamDto teamDto, String username) {
         log.info("Adding new team");
 
         var user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
@@ -54,12 +54,13 @@ public class TeamService {
                 .build();
 
         team = teamRepository.save(team);
-        addTeamMember(user.getUserId(), team.getTeamId());
-        return teamMapper.toDto(team);
+        var teamUser = addTeamMember(user.getUserId(), team.getTeamId());
+        team.setMembers(List.of(teamUser));
+        return teamMapper.toDetailsDto(team);
     }
 
     @Transactional
-    public void addTeamMember(Long userId, Long teamId) {
+    public TeamUser addTeamMember(Long userId, Long teamId) {
         log.info("Adding user {} to team {}", userId, teamId);
         var user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         var team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
@@ -70,7 +71,11 @@ public class TeamService {
                 .joinDate(LocalDateTime.now())
                 .build();
         teamUserRepository.save(teamUser);
+        addUserToAllBoards(userId, team);
+        return teamUser;
+    }
 
+    private void addUserToAllBoards(Long userId, Team team) {
         if (team.getBoards() != null) {
             team.getBoards()
                     .stream()

@@ -29,7 +29,7 @@ public class TeamController {
     }
 
     @PostMapping
-    public ResponseEntity<TeamDto> addNewTeam(@RequestBody @Validated TeamDto teamDto, Principal principal) {
+    public ResponseEntity<TeamDetailsDto> addNewTeam(@RequestBody @Validated TeamDto teamDto, Principal principal) {
         var team = teamService.addNewTeam(teamDto, principal.getName());
         return ResponseEntity.ok(team);
     }
