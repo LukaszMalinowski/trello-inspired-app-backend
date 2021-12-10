@@ -1,4 +1,4 @@
-package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto;
+package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.task;
 
 import lombok.Data;
 
@@ -6,12 +6,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class UpdateTaskDto {
+public class NewTaskDto {
 
-    @NotBlank
     @NotNull
+    @NotBlank
     private String title;
     private String description;
-    private Long assigneeId;
 
 }

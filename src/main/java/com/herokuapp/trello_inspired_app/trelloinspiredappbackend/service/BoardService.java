@@ -1,9 +1,9 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardColumnDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardMembersDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardColumnDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardMembersDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardUserDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.*;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.BoardMapper;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.*;
@@ -12,6 +12,7 @@ import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.Boa
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ import static com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.R
 @Service
 @RequiredArgsConstructor
 @Slf4j
-//TODO: Add assigning to board
+//TODO: think about if this is needed - if board has team - check if users is a member of a team
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -38,6 +39,7 @@ public class BoardService {
         log.info("Getting all boards");
         var boards = boardRepository.findAll();
         return boards.stream()
+                .filter(board -> board.getTeam() == null)
                 .map(boardMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -109,11 +111,28 @@ public class BoardService {
     public BoardColumnDto getBoardDetails(Long boardId) {
         log.info("Getting board details for board with id {}", boardId);
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+
+        if (board.getTeam() != null) {
+            verifyIfUserIsTeamMember(board.getTeam());
+        }
+
         return boardMapper.toColumnDto(board);
     }
 
-    public boolean isMember(Long boardId, Long userId) {
-        return boardUserRepository.existsByBoard_BoardIdAndAndUser_UserId(boardId, userId);
+    private void verifyIfUserIsTeamMember(Team team) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getCredentials().equals("")) {
+            throw new UserNotAuthenticatedException();
+        }
+
+        if (team.getMembers().stream()
+                .noneMatch(teamUser -> teamUser.getUser().getUsername().equals(authentication.getName()))) {
+            throw new UserNotPermittedException();
+        }
+    }
+
+    public boolean isNotBoardMember(Long boardId, Long userId) {
+        return !boardUserRepository.existsByBoard_BoardIdAndAndUser_UserId(boardId, userId);
     }
 
     public void addMember(Long userId, Long boardId, Role role) {
@@ -135,6 +154,7 @@ public class BoardService {
         verifyUser(userId, user);
         return boardUserRepository.findBoardUsersByUser_UserId(userId).stream()
                 .map(BoardUser::getBoard)
+                .filter(board -> board.getTeam() == null)
                 .map(boardMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -144,6 +164,7 @@ public class BoardService {
         verifyUser(userId, user);
         return boardUserRepository.findBoardUsersByUser_UserId_AndRole(userId, ADMIN).stream()
                 .map(BoardUser::getBoard)
+                .filter(board -> board.getTeam() == null)
                 .map(boardMapper::toMembersDto)
                 .collect(Collectors.toList());
     }

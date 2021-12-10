@@ -1,7 +1,7 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.NewTaskDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TaskDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.task.NewTaskDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.task.TaskDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.ColumnService;
 import lombok.RequiredArgsConstructor;

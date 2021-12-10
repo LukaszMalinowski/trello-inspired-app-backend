@@ -1,6 +1,6 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TaskDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.task.TaskDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Task;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.UserRepository;
 import org.mapstruct.Mapper;

@@ -1,10 +1,7 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest.handlers;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.ExceptionDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BaseExceptionHandler;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserIsNotAdminException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotPermittedException;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UsernameIsTakenException;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.*;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -40,6 +37,18 @@ public class AuthorizationExceptionHandler extends BaseExceptionHandler {
     @ExceptionHandler(UserNotPermittedException.class)
     ResponseEntity<ExceptionDto> onUserNotPermittedException(UserNotPermittedException exception, Locale locale) {
         return createResponse(exception, FORBIDDEN, locale);
+    }
+
+    @ExceptionHandler(UserIsNotMemberOfTeamException.class)
+    ResponseEntity<ExceptionDto> onUserIsNotMemberOfTeamException(UserIsNotMemberOfTeamException exception,
+                                                                  Locale locale) {
+        return createResponse(exception, FORBIDDEN, locale);
+    }
+
+    @ExceptionHandler(UserNotAuthenticatedException.class)
+    ResponseEntity<ExceptionDto> onUserNotAuthenticatedException(UserNotAuthenticatedException exception,
+                                                                 Locale locale) {
+        return createResponse(exception, UNAUTHORIZED, locale);
     }
 
 }

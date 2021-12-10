@@ -14,24 +14,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Board {
+public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long boardId;
-    @NotNull
+    private Long teamId;
     @NotBlank
     private String name;
-    private String description;
     @NotNull
     private LocalDateTime createdDate;
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
     private User owner;
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private List<BoardUser> members;
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private List<Column> columns;
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
-    private Team team;
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private List<TeamUser> members;
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private List<Board> boards;
 
 }

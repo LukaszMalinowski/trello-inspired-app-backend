@@ -1,6 +1,6 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.UpdateTaskDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.task.UpdateTaskDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.TaskService;
 import lombok.RequiredArgsConstructor;

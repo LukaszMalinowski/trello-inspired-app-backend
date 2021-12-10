@@ -69,6 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(GET, "/api/boards", "/api/boards/").permitAll()
                 .antMatchers(GET, "/api/boards/{\\d+}", "/api/boards/{\\d+}/").permitAll()
                 .antMatchers(GET, "/api/boards/{\\d+}/users", "/api/boards/{\\d+}/users/").permitAll()
+                .antMatchers(GET, "/api/teams", "/api/teams/").permitAll()
                 .anyRequest().authenticated()
                 .and().cors().configurationSource(corsConfigurationSource())
                 .and().csrf().disable();

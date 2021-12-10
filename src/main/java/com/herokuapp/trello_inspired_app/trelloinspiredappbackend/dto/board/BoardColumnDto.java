@@ -1,5 +1,6 @@
-package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto;
+package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board;
 
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.column.ColumnDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;

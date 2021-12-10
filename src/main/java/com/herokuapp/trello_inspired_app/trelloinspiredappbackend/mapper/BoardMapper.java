@@ -1,9 +1,9 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardColumnDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardMembersDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardColumnDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardMembersDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardUserDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Board;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.BoardUser;
 import org.mapstruct.Mapper;
@@ -27,20 +27,5 @@ public interface BoardMapper {
     }
 
     BoardMembersDto toMembersDto(Board board);
-//    default BoardMembersDto toMembersDto(Board board) {
-//        return BoardMembersDto.builder()
-//                .boardId(board.getBoardId())
-//                .name(board.getName())
-//                .description(board.getDescription())
-//                .createdDate(board.getCreatedDate())
-//                .members()
-//                .build();
-//    }
-//
-//    default BoardUserDto getMembers(BoardUser user) {
-//        return BoardUserDto.builder()
-//                .userId(user.)
-//                .build()
-//    }
 
 }

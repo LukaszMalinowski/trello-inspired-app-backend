@@ -1,7 +1,7 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.NewTaskDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TaskDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.task.NewTaskDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.task.TaskDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.ColumnNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.TaskNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
@@ -45,7 +45,7 @@ public class ColumnService {
 
         var user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 
-        if (!boardService.isMember(boardId, user.getUserId())) {
+        if (boardService.isNotBoardMember(boardId, user.getUserId())) {
             boardService.addMember(user.getUserId(), boardId, MEMBER);
         }
 
@@ -68,7 +68,7 @@ public class ColumnService {
         var column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
         Long boardId = column.getBoard().getBoardId();
 
-        if (!boardService.isMember(boardId, user.getUserId())) {
+        if (boardService.isNotBoardMember(boardId, user.getUserId())) {
             boardService.addMember(user.getUserId(), boardId, MEMBER);
         }
 
