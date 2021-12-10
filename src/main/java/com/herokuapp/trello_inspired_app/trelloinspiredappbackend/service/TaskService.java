@@ -29,7 +29,7 @@ public class TaskService {
         log.info("Removing task with id {}", taskId);
         var task = taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
         Long boardId = task.getColumn().getBoard().getBoardId();
-        if (!boardService.isMember(boardId, user.getUserId())) {
+        if (boardService.isNotBoardMember(boardId, user.getUserId())) {
             boardService.addMember(user.getUserId(), boardId, MEMBER);
         }
         taskRepository.delete(task);
@@ -40,7 +40,7 @@ public class TaskService {
         log.info("Editing task with id {}", taskId);
         var task = taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
         Long boardId = task.getColumn().getBoard().getBoardId();
-        if (!boardService.isMember(boardId, user.getUserId())) {
+        if (boardService.isNotBoardMember(boardId, user.getUserId())) {
             boardService.addMember(user.getUserId(), boardId, MEMBER);
         }
         updateTask(task, taskDto);

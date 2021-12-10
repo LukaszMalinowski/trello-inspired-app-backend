@@ -45,7 +45,7 @@ public class ColumnService {
 
         var user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 
-        if (!boardService.isMember(boardId, user.getUserId())) {
+        if (boardService.isNotBoardMember(boardId, user.getUserId())) {
             boardService.addMember(user.getUserId(), boardId, MEMBER);
         }
 
@@ -68,7 +68,7 @@ public class ColumnService {
         var column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
         Long boardId = column.getBoard().getBoardId();
 
-        if (!boardService.isMember(boardId, user.getUserId())) {
+        if (boardService.isNotBoardMember(boardId, user.getUserId())) {
             boardService.addMember(user.getUserId(), boardId, MEMBER);
         }
 

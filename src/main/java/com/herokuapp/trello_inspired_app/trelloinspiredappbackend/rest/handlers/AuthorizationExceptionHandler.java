@@ -45,4 +45,10 @@ public class AuthorizationExceptionHandler extends BaseExceptionHandler {
         return createResponse(exception, FORBIDDEN, locale);
     }
 
+    @ExceptionHandler(UserNotAuthenticatedException.class)
+    ResponseEntity<ExceptionDto> onUserNotAuthenticatedException(UserNotAuthenticatedException exception,
+                                                                 Locale locale) {
+        return createResponse(exception, UNAUTHORIZED, locale);
+    }
+
 }
