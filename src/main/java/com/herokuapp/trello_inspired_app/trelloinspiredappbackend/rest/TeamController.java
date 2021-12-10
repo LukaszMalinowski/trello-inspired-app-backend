@@ -1,8 +1,8 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TeamDetailsDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TeamDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.team.TeamDetailsDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.team.TeamDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotPermittedException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.TeamService;
@@ -32,6 +32,12 @@ public class TeamController {
     public ResponseEntity<TeamDetailsDto> addNewTeam(@RequestBody @Validated TeamDto teamDto, Principal principal) {
         var team = teamService.addNewTeam(teamDto, principal.getName());
         return ResponseEntity.ok(team);
+    }
+
+    @DeleteMapping("/{teamId}")
+    public ResponseEntity<Void> deleteTeam(@PathVariable Long teamId, Principal principal) {
+        teamService.deleteTeam(teamId, principal.getName());
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{teamId}/boards")

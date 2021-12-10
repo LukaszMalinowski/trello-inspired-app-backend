@@ -1,6 +1,6 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.UpdateTaskDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.task.UpdateTaskDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.TaskNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.Task;

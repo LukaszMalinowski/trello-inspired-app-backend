@@ -1,4 +1,4 @@
-package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto;
+package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.team;
 
 import lombok.Getter;
 import lombok.Setter;

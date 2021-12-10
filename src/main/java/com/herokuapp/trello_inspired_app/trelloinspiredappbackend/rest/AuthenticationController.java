@@ -1,8 +1,8 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.rest;
 
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TokenDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.UserCredentialsDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.UserRegistrationDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.user.UserCredentialsDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.user.UserRegistrationDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service.UserService;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.util.JwtUtil;

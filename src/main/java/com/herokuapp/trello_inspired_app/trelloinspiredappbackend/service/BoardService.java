@@ -1,9 +1,9 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardColumnDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardMembersDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardUserDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardColumnDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardMembersDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardUserDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.*;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.mapper.BoardMapper;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.*;
@@ -25,6 +25,7 @@ import static com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.R
 @Service
 @RequiredArgsConstructor
 @Slf4j
+//TODO: think about if this is needed - if board has team - check if users is a member of a team
 public class BoardService {
 
     private final BoardRepository boardRepository;

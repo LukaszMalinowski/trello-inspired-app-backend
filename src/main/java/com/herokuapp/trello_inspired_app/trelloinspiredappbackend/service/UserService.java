@@ -1,6 +1,6 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.UserRegistrationDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.user.UserRegistrationDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UsernameIsTakenException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.model.User;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.repository.UserRepository;

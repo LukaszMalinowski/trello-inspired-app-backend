@@ -1,4 +1,4 @@
-package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto;
+package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.user;
 
 import lombok.*;
 

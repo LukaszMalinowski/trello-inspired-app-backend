@@ -1,8 +1,8 @@
 package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.service;
 
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.BoardDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TeamDetailsDto;
-import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.TeamDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.board.BoardDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.team.TeamDetailsDto;
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.team.TeamDto;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.BoardNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.TeamNotFoundException;
 import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.exception.UserIsNotMemberOfTeamException;
@@ -126,5 +126,16 @@ public class TeamService {
         return team.getBoards().stream()
                 .map(boardMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteTeam(Long teamId, String username) {
+        log.info("Deleting team");
+        var user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+        var team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+
+        verifyIfUserIsMemberOfTeam(team, user);
+
+        teamRepository.delete(team);
     }
 }

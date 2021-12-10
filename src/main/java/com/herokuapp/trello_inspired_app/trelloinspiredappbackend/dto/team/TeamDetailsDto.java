@@ -1,5 +1,6 @@
-package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto;
+package com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.team;
 
+import com.herokuapp.trello_inspired_app.trelloinspiredappbackend.dto.user.UserDto;
 import lombok.Builder;
 import lombok.Data;
 
